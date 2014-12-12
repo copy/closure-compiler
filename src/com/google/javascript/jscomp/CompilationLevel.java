@@ -132,7 +132,9 @@ public enum CompilationLevel {
     options.foldConstants = true;
     options.coalesceVariableNames = true;
     options.deadAssignmentElimination = true;
-    options.extractPrototypeMemberDeclarations = true;
+
+    // disable `var JSCompiler_prototypeAlias = Foo.prototype; ...`
+    //options.setExtractPrototypeMemberDeclarations(true);
     options.collapseVariableDeclarations = true;
     options.convertToDottedProperties = true;
     options.labelRenaming = true;
@@ -144,20 +146,22 @@ public enum CompilationLevel {
     // All the advanced optimizations.
     options.removeClosureAsserts = true;
     options.reserveRawExports = true;
-
-    // Changed: Use only local renaming policy
     //options.setRenamingPolicy(
     //    VariableRenamingPolicy.ALL, PropertyRenamingPolicy.ALL_UNQUOTED);
-    //
+    
+    // get rid of the insanely aggressive renaming
     options.setRenamingPolicy(
-        VariableRenamingPolicy.ALL, PropertyRenamingPolicy.OFF);
-
+        VariableRenamingPolicy.LOCAL, PropertyRenamingPolicy.OFF);
     options.shadowVariables = true;
     options.removeUnusedPrototypeProperties = true;
-    options.removeUnusedPrototypePropertiesInExterns = true;
+    options.removeUnusedPrototypePropertiesInExterns = false;
     options.removeUnusedClassProperties = true;
     options.collapseAnonymousFunctions = true;
-    options.collapseProperties = true;
+
+    // get rid of 'obj.a' -> 'obj$a'
+    //options.collapseProperties = true;
+    options.collapseProperties = false;
+
     options.checkGlobalThisLevel = CheckLevel.WARNING;
     options.rewriteFunctionExpressions = false;
     options.smartNameRemoval = true;
@@ -177,7 +181,10 @@ public enum CompilationLevel {
     options.crossModuleMethodMotion = true;
 
     // Call optimizations
-    options.devirtualizePrototypeMethods = true;
+    
+    //options.devirtualizePrototypeMethods = true;
+    options.devirtualizePrototypeMethods = false;
+
     options.optimizeParameters = true;
     options.optimizeReturns = true;
     options.optimizeCalls = true;
